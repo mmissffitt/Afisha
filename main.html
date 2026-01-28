@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Афиша событий</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }
+
+        header {
+            background: #2c3e50; color: white; padding: 20px; text-align: center;
+        }
+        header h1 { font-size: 2em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; margin-bottom: 20px; }
+
+        .header-controls {
+            display: flex; gap: 20px; max-width: 1200px; margin: 0 auto; padding: 0 20px;
+        }
+        .nav-links { flex: 1; display: flex; list-style: none; }
+        .nav-links li { margin-right: 10px; }
+        .nav-links a {
+            color: white; text-decoration: none; padding: 10px 15px;
+        }
+        .search-form {
+            flex: 1; display: flex;
+        }
+        .search-form input {
+            flex: 1; padding: 10px; border: 1px solid #ccc;
+        }
+        .search-form button {
+            padding: 10px 20px; background: #3498db; color: white; border: none; cursor: pointer;
+        }
+
+        main { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        section { background: white; margin-bottom: 20px; padding: 20px; }
+        section h2 { font-size: 1.5em; margin-bottom: 15px; color: #333; }
+
+        .filter-buttons {
+            display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;
+        }
+        .filter-btn {
+            padding: 8px 16px; background: #3498db; color: white; border: none; cursor: pointer;
+        }
+        .filter-btn.active { background: #2980b9; }
+
+        .events-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;
+        }
+        .event-card {
+            display: flex; flex-direction: column; min-height: 280px;
+            background: #f9f9f9; padding: 15px;
+        }
+        .event-card h3 { font-size: 1.3em; margin-bottom: 10px; }
+        .event-card p { margin-bottom: 5px; font-size: 0.95em; }
+        .event-card strong { color: #333; }
+        .btn-details {
+            margin-top: auto; padding: 10px; background: #6489ae; color: white;
+            border: none; cursor: pointer;
+        }
+
+        footer {
+            background: #2c3e50; color: white; text-align: center; padding: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Афиша событий</h1>
+        <p>Каталог событий города Сургута</p>
+        <div class="header-controls">
+            <ul class="nav-links">
+                <li><a href="#home">Главная</a></li>
+                <li><a href="#events">События</a></li>
+                <li><a href="#filter">Фильтр</a></li>
+                <li><a href="#contacts">Контакты</a></li>
+            </ul>
+            <form class="search-form">
+                <input type="text" placeholder="Название события или категория...">
+                <button type="submit">Поиск</button>
+            </form>
+        </div>
+    </header>
+
+    <main>
+        <section id="filter">
+            <h2>Фильтр по событиям</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active">Показать все</button>
+                <button class="filter-btn">Музыка</button>
+                <button class="filter-btn">Театр</button>
+                <button class="filter-btn">Искусство</button>
+                <button class="filter-btn">Спорт</button>
+            </div>
+        </section>
+
+        <section id="all-events">
+            <h2>Все события</h2>
+            <div class="events-grid">
+                <article class="event-card">
+                    <h3>Классический концерт</h3>
+                    <p><strong>Дата:</strong> 1 февраля 2026</p>
+                    <p><strong>Время:</strong> 19:00</p>
+                    <p><strong>Место:</strong> Концертный зал</p>
+                    <p><strong>Категория:</strong> Музыка</p>
+                    <p>Концерт классической музыки с участием местного оркестра. Программа включает произведения известных композиторов.</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+                <article class="event-card">
+                    <h3>Театральное представление</h3>
+                    <p><strong>Дата:</strong> 3 февраля 2026</p>
+                    <p><strong>Время:</strong> 18:30</p>
+                    <p><strong>Место:</strong> Драматический театр</p>
+                    <p><strong>Категория:</strong> Театр</p>
+                    <p>Премьера новой постановки по мотивам классической пьесы. На сцене лучшие актеры города.</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+                <article class="event-card">
+                    <h3>Выставка современного искусства</h3>
+                    <p><strong>Дата:</strong> 5 февраля 2026</p>
+                    <p><strong>Время:</strong> 10:00</p>
+                    <p><strong>Место:</strong> Выставочный центр</p>
+                    <p><strong>Категория:</strong> Искусство</p>
+                    <p>Экспозиция работ молодых художников. Интерактивные инсталляции и мастер-классы.</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+                <article class="event-card">
+                    <h3>Спортивный фестиваль</h3>
+                    <p><strong>Дата:</strong> 7 февраля 2026</p>
+                    <p><strong>Время:</strong> 09:00</p>
+                    <p><strong>Место:</strong> Спортивный комплекс</p>
+                    <p><strong>Категория:</strong> Спорт</p>
+                    <p>Региональный чемпионат по различным видам спорта. Участие открыто для всех желающих.</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+            </div>
+        </section>
+
+        <section id="popular">
+            <h2>Популярные события</h2>
+            <div class="events-grid">
+                <article class="event-card">
+                    <h3>Концерт звезды</h3>
+                    <p><strong>Дата:</strong> 10 февраля 2026</p>
+                    <p><strong>Время:</strong> 20:00</p>
+                    <p><strong>Место:</strong> Дворец спорта</p>
+                    <p><strong>Категория:</strong> Музыка</p>
+                    <p>Выступление популярного исполнителя с хитами.</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+                <article class="event-card">
+                    <h3>Театральный фестиваль</h3>
+                    <p><strong>Дата:</strong> 12 февраля 2026</p>
+                    <p><strong>Время:</strong> 19:00</p>
+                    <p><strong>Место:</strong> Городской театр</p>
+                    <p><strong>Категория:</strong> Театр</p>
+                    <p>Лучшие постановки сезона от местных трупп.</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Афиша событий. Все права защищены.</p>
+    </footer>
+</body>
+</html>
