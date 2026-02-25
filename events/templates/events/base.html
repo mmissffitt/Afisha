@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Афиша событий - {% block title %}Сургут{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'events/css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Афиша событий</h1>
+        <p>Каталог событий города Сургута</p>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <ul>
+                <li><a href="#" data-category="all">Все</a></li>
+                <li><a href="#" data-category="music">Музыка</a></li>
+                <li><a href="#" data-category="theatre">Театр</a></li>
+                <li><a href="#" data-category="art">Искусство</a></li>
+                <li><a href="#" data-category="sport">Спорт</a></li>
+                <li><a href="#" data-category="exhibitions">Выставки</a></li>
+                <li><a href="#contacts">Контакты</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <p>&copy; 2026 Афиша событий. Все права защищены.</p>
+    </footer>
+
+    <script src="{% static 'events/js/script.js' %}"></script>
+</body>
+</html>

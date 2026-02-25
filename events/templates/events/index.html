@@ -1,0 +1,70 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<main>
+    <section id="search-filters">
+        <div class="search-container">
+            <input type="text" class="main-search" placeholder="Найти событие, площадку или участника...">
+            <button class="search-btn">Поиск</button>
+        </div>
+        
+        <div class="date-filters">
+            <h3>Фильтр по датам:</h3>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-date="all">Все даты</button>
+                <button class="filter-btn" data-date="today">Сегодня</button>
+                <button class="filter-btn" data-date="tomorrow">Завтра</button>
+                <button class="filter-btn" data-date="weekend">Эти выходные</button>
+                <button class="filter-btn" data-date="week">На этой неделе</button>
+                <button class="filter-btn" data-date="custom">Выбрать даты</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="events">
+        <h2>Афиша событий</h2>
+        <div class="events-grid" id="events-grid">
+            {% for event in events %}
+            <article class="event-card" data-event-id="{{ event.id }}">
+                <div class="event-image">
+                    {% if event.image %}
+                        <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width: 100%; height: auto;">
+                    {% endif %}
+                </div>
+                <span class="event-category">{{ event.get_category_display }}</span>
+                <h3>{{ event.title }}</h3>
+                <p><strong>Дата:</strong> {{ event.get_date_display }}</p>
+                <p><strong>Площадка:</strong> {{ event.venue }}</p>
+                <p><strong>Участники:</strong> {{ event.participants }}</p>
+                <p class="event-description">{{ event.description|truncatechars:100 }}</p>
+                <p class="event-price"><strong>Цена:</strong> {{ event.price|default:"бесплатно" }}</p>
+                <button class="btn-details">Подробнее</button>
+            </article>
+            {% empty %}
+            <p>Событий пока нет</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section id="popular">
+        <h2>Популярные события</h2>
+        <div class="events-grid">
+            {% for event in popular_events %}
+            <article class="event-card popular-event">
+                <h3>{{ event.title }}</h3>
+                <p><strong>Дата:</strong> {{ event.get_date_only }}</p>
+                <p><strong>Время:</strong> {{ event.date|date:"H:i" }}</p>
+                <p><strong>Место:</strong> {{ event.venue }}</p>
+                <p>{{ event.description|truncatechars:100 }}</p>
+                <button class="btn-details">Подробнее</button>
+            </article>
+            {% empty %}
+            <p>Популярных событий пока нет</p>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}
