@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Афиша событий</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Афиша событий</h1>
+        <p>Каталог событий города Сургута</p>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <ul>
+                <li><a href="#" data-category="all">Все</a></li>
+                <li><a href="#" data-category="music">Музыка</a></li>
+                <li><a href="#" data-category="theatre">Театр</a></li>
+                <li><a href="#" data-category="art">Искусство</a></li>
+                <li><a href="#" data-category="sport">Спорт</a></li>
+                <li><a href="#" data-category="exhibitions">Выставки</a></li>
+                <li><a href="#contacts">Контакты</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="search-filters">
+            <div class="search-container">
+                <input type="text" class="main-search" placeholder="Найти событие, площадку или участника...">
+                <button class="search-btn">Поиск</button>
+            </div>
+            
+            <div class="date-filters">
+                <h3>Фильтр по датам:</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-date="all">Все даты</button>
+                    <button class="filter-btn" data-date="today">Сегодня</button>
+                    <button class="filter-btn" data-date="tomorrow">Завтра</button>
+                    <button class="filter-btn" data-date="weekend">Эти выходные</button>
+                    <button class="filter-btn" data-date="week">На этой неделе</button>
+                    <button class="filter-btn" data-date="custom">Выбрать даты</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="events">
+            <h2>Афиша событий</h2>
+            <div class="events-grid">
+                <article class="event-card">
+                    <div class="event-image"></div>
+                    <span class="event-category">Музыка</span>
+                    <h3>Классический концерт</h3>
+                    <p><strong>Дата:</strong> 5 февраля 2026, 19:00</p>
+                    <p><strong>Площадка:</strong> Концертный зал им. Филармонии</p>
+                    <p><strong>Участники:</strong> Сургутский симфонический оркестр</p>
+                    <p class="event-description">Концерт классической музыки с участием местного оркестра. Программа включает произведения Чайковского, Рахманинова.</p>
+                    <p class="event-price"><strong>Цена:</strong> от 500 ₽</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+
+                <article class="event-card">
+                    <div class="event-image"></div>
+                    <span class="event-category">Театр</span>
+                    <h3>Вишнёвый сад</h3>
+                    <p><strong>Дата:</strong> 6 февраля 2026, 18:30</p>
+                    <p><strong>Площадка:</strong> Сургутский драматический театр</p>
+                    <p><strong>Участники:</strong> Труппа СДТ, реж. Петров И.А.</p>
+                    <p class="event-description">Премьера постановки по пьесе А.П. Чехова. Новое прочтение классики от молодого режиссёра.</p>
+                    <p class="event-price"><strong>Цена:</strong> от 800 ₽</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+
+                <article class="event-card">
+                    <div class="event-image"></div>
+                    <span class="event-category">Искусство</span>
+                    <h3>Северная палитра</h3>
+                    <p><strong>Дата:</strong> 7 февраля 2026, 10:00</p>
+                    <p><strong>Площадка:</strong> Выставочный центр "Стерх"</p>
+                    <p><strong>Участники:</strong> Художники ХМАО</p>
+                    <p class="event-description">Выставка работ молодых художников региона. Живопись, графика, инсталляции. Мастер-классы по выходным.</p>
+                    <p class="event-price"><strong>Вход:</strong> бесплатно</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+
+                <article class="event-card">
+                    <div class="event-image"></div>
+                    <span class="event-category">Спорт</span>
+                    <h3>Кубок Севера по футболу</h3>
+                    <p><strong>Дата:</strong> 8 февраля 2026, 09:00</p>
+                    <p><strong>Площадка:</strong> СК "Факел"</p>
+                    <p><strong>Участники:</strong> 8 команд ХМАО</p>
+                    <p class="event-description">Региональный турнир по мини-футболу. Участие любителей и профессионалов. Призовой фонд 100 000 ₽.</p>
+                    <p class="event-price"><strong>Вход:</strong> свободный</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+            </div>
+        </section>
+
+        <section id="popular">
+            <h2>Популярные события</h2>
+            <div class="events-grid">
+                <article class="event-card popular-event">
+                    <h3>Классический концерт</h3>
+                    <p><strong>Дата:</strong> 1 февраля 2026</p>
+                    <p><strong>Время:</strong> 19:00</p>
+                    <p><strong>Место:</strong> Концертный зал</p>
+                    <p>Концерт классической музыки с участием местного оркестра. Программа включает произведения известных композиторов.</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+
+                <article class="event-card popular-event">
+                    <h3>Выставка современного искусства</h3>
+                    <p><strong>Дата:</strong> 5 февраля 2026</p>
+                    <p><strong>Время:</strong> 10:00</p>
+                    <p><strong>Место:</strong> Выставочный центр</p>
+                    <p>Экспозиция работ молодых художников. Интерактивные инсталляции и мастер-классы.</p>
+                    <button class="btn-details">Подробнее</button>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Афиша событий. Все права защищены.</p>
+    </footer>
+</body>
+</html>
