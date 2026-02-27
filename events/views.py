@@ -23,11 +23,9 @@ def filter_events(request):
         
         events = Event.objects.all()
         
-        # Фильтр по категории
         if category != 'all':
             events = events.filter(category=category)
         
-        # Фильтр по дате
         today = timezone.now().date()
         
         if date_filter == 'today':
@@ -36,9 +34,8 @@ def filter_events(request):
             tomorrow = today + timedelta(days=1)
             events = events.filter(date__date=tomorrow)
         elif date_filter == 'weekend':
-            # Находим ближайшие выходные
             days_until_saturday = (5 - today.weekday()) % 7
-            if days_until_saturday == 0:  # Если сегодня суббота
+            if days_until_saturday == 0:  
                 days_until_saturday = 0
             saturday = today + timedelta(days=days_until_saturday)
             sunday = saturday + timedelta(days=1)
@@ -47,7 +44,6 @@ def filter_events(request):
             week_end = today + timedelta(days=7)
             events = events.filter(date__date__range=[today, week_end])
         
-        # ПОИСК - исправленная часть
         if search:
             events = events.filter(
                 Q(title__icontains=search) |
@@ -56,14 +52,11 @@ def filter_events(request):
                 Q(participants__icontains=search)
             )
         
-        # Подготовка данных для JSON ответа
         events_data = []
         for event in events:
-            # Форматируем дату правильно
             date_str = event.date.strftime('%d %B %Y, %H:%M')
             date_only_str = event.date.strftime('%d %B %Y')
             
-            # Правильно получаем название категории на русском
             category_display = dict(Event.CATEGORY_CHOICES).get(event.category, event.category)
             
             events_data.append({
@@ -83,3 +76,6 @@ def filter_events(request):
         return JsonResponse({'events': events_data})
     
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+
