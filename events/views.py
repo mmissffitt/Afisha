@@ -23,9 +23,11 @@ def filter_events(request):
         
         events = Event.objects.all()
         
+        # Фильтр по категории
         if category != 'all':
             events = events.filter(category=category)
         
+        # Фильтр по дате
         today = timezone.now().date()
         
         if date_filter == 'today':
@@ -35,15 +37,21 @@ def filter_events(request):
             events = events.filter(date__date=tomorrow)
         elif date_filter == 'weekend':
             days_until_saturday = (5 - today.weekday()) % 7
-            if days_until_saturday == 0:  
-                days_until_saturday = 0
+            if days_until_saturday == 0:
+                days_until_saturday = 7
             saturday = today + timedelta(days=days_until_saturday)
             sunday = saturday + timedelta(days=1)
             events = events.filter(date__date__in=[saturday, sunday])
         elif date_filter == 'week':
             week_end = today + timedelta(days=7)
             events = events.filter(date__date__range=[today, week_end])
+        elif date_filter == 'custom':
+            date_start = request.GET.get('date_start', '')
+            date_end = request.GET.get('date_end', '')
+            if date_start and date_end:
+                events = events.filter(date__date__range=[date_start, date_end])
         
+        # Поиск
         if search:
             events = events.filter(
                 Q(title__icontains=search) |
@@ -52,6 +60,7 @@ def filter_events(request):
                 Q(participants__icontains=search)
             )
         
+        # Формируем данные для ответа
         events_data = []
         for event in events:
             date_str = event.date.strftime('%d %B %Y, %H:%M')
@@ -76,6 +85,3 @@ def filter_events(request):
         return JsonResponse({'events': events_data})
     
     return JsonResponse({'error': 'Method not allowed'}, status=405)
-
-
-

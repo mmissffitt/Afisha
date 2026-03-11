@@ -19,8 +19,20 @@
                 <button class="filter-btn" data-date="tomorrow">Завтра</button>
                 <button class="filter-btn" data-date="weekend">Эти выходные</button>
                 <button class="filter-btn" data-date="week">На этой неделе</button>
-                <button class="filter-btn" data-date="custom">Выбрать даты</button>
+                <button class="filter-btn" id="custom-date-btn" data-date="custom">Выбрать даты</button>
             </div>
+            
+            <!-- Блок для календаря -->
+            <div id="date-range-picker" style="display: none; margin-top: 15px; padding: 15px; background: #f0f0f0; border-radius: 4px;">
+                <label>С: <input type="date" id="date-start" style="padding: 5px; border: 1px solid #ccc; border-radius: 4px;"></label>
+                <label style="margin-left: 10px;">По: <input type="date" id="date-end" style="padding: 5px; border: 1px solid #ccc; border-radius: 4px;"></label>
+                <button id="apply-date-range" class="search-btn" style="margin-left: 10px; padding: 5px 15px;">Применить</button>
+            </div>
+        </div>
+        
+        <!-- Кнопка сброса всех фильтров -->
+        <div style="margin-top: 15px; text-align: center;">
+            <button id="reset-filters" class="reset-btn">Сбросить все фильтры</button>
         </div>
     </section>
 

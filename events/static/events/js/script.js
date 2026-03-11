@@ -7,7 +7,6 @@ const eventsGrid = document.getElementById('events-grid');
 let currentCategory = 'all';
 let currentDate = 'all';
 let currentSearch = '';
-let currentSort = 'date_asc';
 let customDateStart = '';
 let customDateEnd = '';
 
@@ -16,7 +15,6 @@ function updateEvents() {
     url.searchParams.append('category', currentCategory);
     url.searchParams.append('date', currentDate);
     url.searchParams.append('search', currentSearch);
-    url.searchParams.append('sort', currentSort);
     
     if (currentDate === 'custom') {
         url.searchParams.append('date_start', customDateStart);
@@ -24,7 +22,7 @@ function updateEvents() {
     }
 
     fetch(url)
-        .then(response => {
+        .then(response => { 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -115,19 +113,11 @@ searchInput.addEventListener('keypress', (e) => {
     }
 });
 
-const sortSelect = document.getElementById('sort-select');
-if (sortSelect) {
-    sortSelect.addEventListener('change', (e) => {
-        currentSort = e.target.value;
-        updateEvents();
-    });
-}
-
+// Кнопка сброса всех фильтров
 document.getElementById('reset-filters').addEventListener('click', () => {
     currentCategory = 'all';
     currentDate = 'all';
     currentSearch = '';
-    currentSort = 'date_asc';
     customDateStart = '';
     customDateEnd = '';
     
@@ -152,6 +142,7 @@ document.getElementById('reset-filters').addEventListener('click', () => {
     updateEvents();
 });
 
+// Календарь
 document.getElementById('custom-date-btn').addEventListener('click', () => {
     const picker = document.getElementById('date-range-picker');
     if (picker) {
