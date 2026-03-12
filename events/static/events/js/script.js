@@ -173,3 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateEvents();
     document.querySelector('nav a[data-category="all"]').classList.add('active-category');
 });
+
+
+
