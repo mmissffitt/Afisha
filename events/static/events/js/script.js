@@ -1,14 +1,16 @@
 const categoryLinks = document.querySelectorAll('nav a[data-category]');
 const dateButtons = document.querySelectorAll('.filter-btn[data-date]');
 const searchInput = document.querySelector('.main-search');
-const searchBtn = document.querySelector('.search-btn');
+const resetButton = document.getElementById('reset-filters');
+const eventsGrid = document.getElementById('events-grid');
+
 let currentCategory = 'all';
 let currentDate = 'all';
 let currentSearch = '';
 let customDateStart = '';
 let customDateEnd = '';
 
-function updateEvents() {
+function filterEvents() {
     const url = new URL('/filter-events/', window.location.origin);
     url.searchParams.append('category', currentCategory);
     url.searchParams.append('date', currentDate);
@@ -22,52 +24,20 @@ function updateEvents() {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            renderEvents(data.events);
+            const eventIds = data.events.map(e => e.id);
+            
+            document.querySelectorAll('.event-card').forEach(card => {
+                const eventId = parseInt(card.dataset.eventId);
+                if (eventIds.includes(eventId)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         })
         .catch(error => {
             console.error('Error:', error);
         });
-}
-
-function renderEvents(events) {
-    const eventsGrid = document.getElementById('events-grid');
-    if (!eventsGrid) return;
-    
-    eventsGrid.innerHTML = '';
-    
-    if (events.length === 0) {
-        eventsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px;">Событий не найдено</p>';
-        return;
-    }
-    
-    events.forEach(event => {
-        const card = document.createElement('article');
-        card.className = 'event-card';
-        
-        const imageHtml = event.image 
-            ? `<img src="${event.image}" alt="${event.title}" style="width: 100%; height: 100%; object-fit: cover;">`
-            : '<span>🎪</span>';
- 
-        const participantsHtml = event.participants 
-            ? `<p><strong>👥</strong> ${event.participants.substring(0, 30)}${event.participants.length > 30 ? '...' : ''}</p>`
-            : '';
-        
-        card.innerHTML = `
-            <div class="event-image">
-                ${imageHtml}
-            </div>
-            <span class="event-category">${event.category}</span>
-            <h3>${event.title}</h3>
-            <p><strong>📅</strong> ${event.date}</p>
-            <p><strong>📍</strong> ${event.venue}</p>
-            ${participantsHtml}
-            <p class="event-description">${event.description.substring(0, 80)}${event.description.length > 80 ? '...' : ''}</p>
-            <p class="event-price">${event.price}</p>
-            <a href="/event/${event.id}/" class="btn-details">Подробнее</a>
-        `;
-        
-        eventsGrid.appendChild(card);
-    });
 }
 
 categoryLinks.forEach(link => {
@@ -78,7 +48,7 @@ categoryLinks.forEach(link => {
         link.classList.add('active-category');
         
         currentCategory = link.dataset.category;
-        updateEvents();
+        filterEvents();
     });
 });
 
@@ -88,24 +58,16 @@ dateButtons.forEach(btn => {
         btn.classList.add('active');
         
         currentDate = btn.dataset.date;
-        updateEvents();
+        filterEvents();
     });
 });
 
-searchBtn.addEventListener('click', () => {
+searchInput.addEventListener('input', () => {
     currentSearch = searchInput.value;
-    updateEvents();
+    filterEvents();
 });
 
-searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        currentSearch = searchInput.value;
-        updateEvents();
-    }
-});
-
-document.getElementById('reset-filters').addEventListener('click', () => {
+resetButton.addEventListener('click', () => {
     currentCategory = 'all';
     currentDate = 'all';
     currentSearch = '';
@@ -130,7 +92,7 @@ document.getElementById('reset-filters').addEventListener('click', () => {
     if (dateStart) dateStart.value = '';
     if (dateEnd) dateEnd.value = '';
     
-    updateEvents();
+    filterEvents();
 });
 
 document.getElementById('custom-date-btn').addEventListener('click', () => {
@@ -152,7 +114,7 @@ document.getElementById('apply-date-range').addEventListener('click', () => {
         dateButtons.forEach(b => b.classList.remove('active'));
         document.getElementById('custom-date-btn').classList.add('active');
         
-        updateEvents();
+        filterEvents();
         document.getElementById('date-range-picker').style.display = 'none';
     } else {
         alert('Пожалуйста, выберите начальную и конечную дату');
@@ -160,6 +122,5 @@ document.getElementById('apply-date-range').addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    updateEvents();
     document.querySelector('nav a[data-category="all"]').classList.add('active-category');
 });

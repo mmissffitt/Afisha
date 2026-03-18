@@ -14,6 +14,7 @@ class Event(models.Model):
     title = models.CharField('Название', max_length=200)
     category = models.CharField('Категория', max_length=20, choices=CATEGORY_CHOICES)
     date = models.DateTimeField('Дата и время')
+    date_end = models.DateTimeField('Дата окончания', blank=True, null=True, help_text='Для выставок и фестивалей')
     venue = models.CharField('Площадка', max_length=200)
     address = models.CharField('Адрес', max_length=300, default='Сургут, ул. Ленина')
     participants = models.CharField('Участники', max_length=300, blank=True, null=True, help_text='Можно не указывать для выставок')
@@ -35,13 +36,19 @@ class Event(models.Model):
         return reverse('event_detail', args=[str(self.id)])
     
     def get_date_display(self):
-        return self.date.strftime('%d %B %Y, %H:%M')
+        if self.date_end:
+            if self.date.strftime('%H:%M') == self.date_end.strftime('%H:%M'):
+                return f"{self.date.strftime('%d.%m.%Y')} - {self.date_end.strftime('%d.%m.%Y')} {self.date.strftime('%H:%M')}"
+            else:
+                return f"{self.date.strftime('%d.%m.%Y')} - {self.date_end.strftime('%d.%m.%Y')}"
+        return self.date.strftime('%d.%m.%Y %H:%M')
     
     def get_date_only(self):
-        return self.date.strftime('%d %B %Y')
+        if self.date_end:
+            return f"{self.date.strftime('%d.%m.%Y')} - {self.date_end.strftime('%d.%m.%Y')}"
+        return self.date.strftime('%d.%m.%Y')
     
     def get_price_display(self):
-        """Возвращает цену в формате 'от X ₽'"""
         if self.price == 0:
             return 'бесплатно'
         return f'от {self.price} ₽'

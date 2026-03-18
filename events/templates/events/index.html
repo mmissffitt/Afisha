@@ -8,7 +8,6 @@
     <section id="search-filters">
         <div class="search-container">
             <input type="text" class="main-search" placeholder="Найти событие, площадку...">
-            <button class="search-btn">Поиск</button>
         </div>
         
         <div class="date-filters">
@@ -22,68 +21,69 @@
                 <button class="filter-btn" id="custom-date-btn" data-date="custom">Выбрать даты</button>
             </div>
             
-            <div id="date-range-picker" style="display: none; margin-top: 15px;">
-                <label>С: <input type="date" id="date-start"></label>
-                <label style="margin-left: 10px;">По: <input type="date" id="date-end"></label>
-                <button id="apply-date-range" class="search-btn" style="margin-left: 10px;">Применить</button>
-            </div>
+            <div id="date-range-picker" class="date-picker-hidden">
+    <label>С: <input type="date" id="date-start"></label>
+    <label class="date-label">По: <input type="date" id="date-end"></label>
+    <button id="apply-date-range" class="search-btn date-apply-btn">Применить</button>
+</div>
         </div>
         
-        <div style="margin-top: 15px; text-align: center;">
-            <button id="reset-filters" class="reset-btn">Сбросить все фильтры</button>
-        </div>
+        <div class="reset-container">
+    <button id="reset-filters" class="reset-btn">Сбросить все фильтры</button>
+</div>
     </section>
 
     <section id="events">
-    <h2>Афиша событий</h2>
-    <div class="events-grid" id="events-grid">
-        {% for event in events %}
-        <article class="event-card">
-            <div class="event-image">
-                {% if event.image %}
-                    <img src="{{ event.image.url }}" alt="{{ event.title }}">
-                {% else %}
-                    <span>🎪</span>
+        <h2>Афиша событий</h2>
+        <div class="events-grid" id="events-grid">
+            {% for event in events %}
+            <article class="event-card" data-event-id="{{ event.id }}">
+                <div class="event-image">
+                    {% if event.image %}
+                        <img src="{{ event.image.url }}" alt="{{ event.title }}">
+                    {% else %}
+                        <span>Нет изображения</span>
+                    {% endif %}
+                </div>
+                <span class="event-category">{{ event.get_category_display }}</span>
+                <h3>{{ event.title }}</h3>
+                <p><strong>Дата:</strong> {{ event.get_date_display }}</p>
+                <p><strong>Место:</strong> {{ event.venue }}</p>
+                {% if event.participants %}
+                <p><strong>Участники:</strong> {{ event.participants|truncatechars:30 }}</p>
                 {% endif %}
-            </div>
-            <span class="event-category">{{ event.get_category_display }}</span>
-            <h3>{{ event.title }}</h3>
-            <p><strong>📅</strong> {{ event.get_date_display }}</p>
-            <p><strong>📍</strong> {{ event.venue }}</p>
-            {% if event.participants %}
-            <p><strong>👥</strong> {{ event.participants|truncatechars:30 }}</p>
-            {% endif %}
-            <p class="event-description">{{ event.description|truncatechars:80 }}</p>
-            <p class="event-price">{{ event.get_price_display }}</p>
-            <a href="{% url 'event_detail' event.id %}" class="btn-details">Подробнее</a>
-        </article>
-        {% endfor %}
-    </div>
-</section>
+                <p class="event-description">{{ event.description|truncatechars:80 }}</p>
+                <p class="event-price">{{ event.get_price_display }}</p>
+                <a href="{% url 'event_detail' event.id %}" class="btn-details">Подробнее</a>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
 
     <section id="popular">
-    <h2>Популярные события</h2>
-    <div class="events-grid">
-        {% for event in popular_events %}
-        <article class="event-card">  <!-- УБРАЛ КЛАСС popular-event -->
-            <div class="event-image">
-                {% if event.image %}
-                    <img src="{{ event.image.url }}" alt="{{ event.title }}">
-                {% else %}
-                    <span>⭐</span>
-                {% endif %}
-            </div>
-            <span class="event-category">{{ event.get_category_display }}</span>  <!-- ДОБАВИЛ КАТЕГОРИЮ -->
-            <h3>{{ event.title }}</h3>
-            <p><strong>📅</strong> {{ event.get_date_only }}</p>
-            <p><strong>📍</strong> {{ event.venue }}</p>
-            <p class="event-description">{{ event.description|truncatechars:80 }}</p>  <!-- ДОБАВИЛ ОПИСАНИЕ -->
-            <p class="event-price">{{ event.get_price_display }}</p>
-            <a href="{% url 'event_detail' event.id %}" class="btn-details">Подробнее</a>  <!-- ДОБАВИЛ ССЫЛКУ -->
-        </article>
-        {% empty %}
-        <p>Популярных событий пока нет</p>
-        {% endfor %}
-    </div>
-</section>
+        <h2>Популярные события</h2>
+        <div class="events-grid">
+            {% for event in popular_events %}
+            <article class="event-card" data-event-id="{{ event.id }}">
+                <div class="event-image">
+                    {% if event.image %}
+                        <img src="{{ event.image.url }}" alt="{{ event.title }}">
+                    {% else %}
+                        <span>Нет изображения</span>
+                    {% endif %}
+                </div>
+                <span class="event-category">{{ event.get_category_display }}</span>
+                <h3>{{ event.title }}</h3>
+                <p><strong>Дата:</strong> {{ event.get_date_display }}</p>
+                <p><strong>Место:</strong> {{ event.venue }}</p>
+                <p class="event-description">{{ event.description|truncatechars:80 }}</p>
+                <p class="event-price">{{ event.get_price_display }}</p>
+                <a href="{% url 'event_detail' event.id %}" class="btn-details">Подробнее</a>
+            </article>
+            {% empty %}
+            <p>Популярных событий пока нет</p>
+            {% endfor %}
+        </div>
+    </section>
+</main>
 {% endblock %}

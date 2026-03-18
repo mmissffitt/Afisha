@@ -5,15 +5,11 @@
 
 {% block content %}
 <main>
-    <div class="purchase-container" style="text-align: center;">
-        <div style="font-size: 5em; color: #864E3E; margin-bottom: 20px;">✅</div>
-        <h1 class="purchase-title">Спасибо за покупку!</h1>
-        <p style="font-size: 1.2em; margin: 30px 0; color: #578088;">
-            Билеты отправлены на вашу электронную почту
-        </p>
-        <a href="{% url 'index' %}" class="btn-details" style="display: inline-block; width: auto; padding: 15px 40px;">
-            Вернуться на главную
-        </a>
-    </div>
+    <div class="purchase-container purchase-success">
+    <div class="success-icon">✓</div>
+    <h1 class="purchase-title">Спасибо за покупку!</h1>
+    <p class="success-message">Билеты отправлены на вашу электронную почту</p>
+    <a href="{% url 'index' %}" class="btn-details btn-return">Вернуться на главную</a>
+</div>
 </main>
 {% endblock %}

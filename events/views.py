@@ -27,10 +27,14 @@ def purchase_ticket(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     
     if request.method == 'POST':
-        # Если данные отправлены - редирект на спасибо
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        quantity = request.POST.get('quantity')
+        ticket_type = request.POST.get('ticket_type')
+        
         return HttpResponseRedirect(reverse('purchase_success'))
     
-    # Если GET запрос - показываем форму
     context = {
         'event': event,
     }
@@ -44,6 +48,8 @@ def filter_events(request):
         category = request.GET.get('category', 'all')
         date_filter = request.GET.get('date', 'all')
         search = request.GET.get('search', '')
+        date_start = request.GET.get('date_start', '')
+        date_end = request.GET.get('date_end', '')
         
         events = Event.objects.all()
 
@@ -53,25 +59,40 @@ def filter_events(request):
         today = timezone.now().date()
         
         if date_filter == 'today':
-            events = events.filter(date__date=today)
+            events = events.filter(
+                Q(date__date=today) | 
+                Q(date_end__date__gte=today, date__date__lte=today)
+            )
         elif date_filter == 'tomorrow':
             tomorrow = today + timedelta(days=1)
-            events = events.filter(date__date=tomorrow)
+            events = events.filter(
+                Q(date__date=tomorrow) | 
+                Q(date_end__date__gte=tomorrow, date__date__lte=tomorrow)
+            )
         elif date_filter == 'weekend':
             days_until_saturday = (5 - today.weekday()) % 7
             if days_until_saturday == 0:
                 days_until_saturday = 7
             saturday = today + timedelta(days=days_until_saturday)
             sunday = saturday + timedelta(days=1)
-            events = events.filter(date__date__in=[saturday, sunday])
+            events = events.filter(
+                Q(date__date__in=[saturday, sunday]) |
+                Q(date_end__date__in=[saturday, sunday]) |
+                Q(date__date__lte=sunday, date_end__date__gte=saturday)
+            )
         elif date_filter == 'week':
             week_end = today + timedelta(days=7)
-            events = events.filter(date__date__range=[today, week_end])
-        elif date_filter == 'custom':
-            date_start = request.GET.get('date_start', '')
-            date_end = request.GET.get('date_end', '')
-            if date_start and date_end:
-                events = events.filter(date__date__range=[date_start, date_end])
+            events = events.filter(
+                Q(date__date__range=[today, week_end]) |
+                Q(date_end__date__range=[today, week_end]) |
+                Q(date__date__lte=week_end, date_end__date__gte=today)
+            )
+        elif date_filter == 'custom' and date_start and date_end:
+            events = events.filter(
+                Q(date__date__range=[date_start, date_end]) |
+                Q(date_end__date__range=[date_start, date_end]) |
+                Q(date__date__lte=date_end, date_end__date__gte=date_start)
+            )
 
         if search:
             events = events.filter(
@@ -83,9 +104,6 @@ def filter_events(request):
         
         events_data = []
         for event in events:
-            date_str = event.date.strftime('%d %B %Y, %H:%M')
-            date_only_str = event.date.strftime('%d %B %Y')
-            
             category_display = dict(Event.CATEGORY_CHOICES).get(event.category, event.category)
             
             events_data.append({
@@ -93,8 +111,8 @@ def filter_events(request):
                 'title': event.title,
                 'category': category_display,
                 'category_code': event.category,
-                'date': date_str,
-                'date_only': date_only_str,
+                'date': event.get_date_display(),
+                'date_only': event.get_date_only(),
                 'venue': event.venue,
                 'participants': event.participants if event.participants else None,
                 'description': event.description[:100] + '...' if len(event.description) > 100 else event.description,

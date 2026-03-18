@@ -8,11 +8,11 @@
     <div class="purchase-container">
         <h1 class="purchase-title">Оформление заказа</h1>
         
-        <div style="margin-bottom: 30px; padding: 20px; background: #F8FAFC; border-radius: 12px;">
+        <div class="event-summary-block">
             <h3>{{ event.title }}</h3>
-            <p><strong>📅</strong> {{ event.get_date_display }}</p>
-            <p><strong>📍</strong> {{ event.venue }}</p>
-            <p><strong>💰</strong> {{ event.get_price_display }}</p>
+            <p><strong>Дата:</strong> {{ event.get_date_display }}</p>
+            <p><strong>Место:</strong> {{ event.venue }}</p>
+            <p><strong>Цена:</strong> {{ event.get_price_display }}</p>
         </div>
         
         <form method="post">
@@ -38,9 +38,9 @@
                 <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="10" value="1">
             </div>
             
-            <button type="submit" class="btn-buy" style="width: 100%; padding: 15px; margin-top: 20px;">
-                Оплатить
-            </button>
+            <button type="submit" class="btn-buy btn-submit">
+    Оплатить
+</button>
         </form>
     </div>
 </main>
