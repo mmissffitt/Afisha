@@ -1,9 +1,10 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse, HttpResponseRedirect
 from .models import Event
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Q
+from django.urls import reverse
 
 def index(request):
     events = Event.objects.all()
@@ -15,6 +16,29 @@ def index(request):
     }
     return render(request, 'events/index.html', context)
 
+def event_detail(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    context = {
+        'event': event,
+    }
+    return render(request, 'events/event_detail.html', context)
+
+def purchase_ticket(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    
+    if request.method == 'POST':
+        # Если данные отправлены - редирект на спасибо
+        return HttpResponseRedirect(reverse('purchase_success'))
+    
+    # Если GET запрос - показываем форму
+    context = {
+        'event': event,
+    }
+    return render(request, 'events/purchase.html', context)
+
+def purchase_success(request):
+    return render(request, 'events/purchase_success.html')
+
 def filter_events(request):
     if request.method == 'GET':
         category = request.GET.get('category', 'all')
@@ -22,12 +46,10 @@ def filter_events(request):
         search = request.GET.get('search', '')
         
         events = Event.objects.all()
-        
-        # Фильтр по категории
+
         if category != 'all':
             events = events.filter(category=category)
-        
-        # Фильтр по дате
+
         today = timezone.now().date()
         
         if date_filter == 'today':
@@ -50,8 +72,7 @@ def filter_events(request):
             date_end = request.GET.get('date_end', '')
             if date_start and date_end:
                 events = events.filter(date__date__range=[date_start, date_end])
-        
-        # Поиск
+
         if search:
             events = events.filter(
                 Q(title__icontains=search) |
@@ -60,7 +81,6 @@ def filter_events(request):
                 Q(participants__icontains=search)
             )
         
-        # Формируем данные для ответа
         events_data = []
         for event in events:
             date_str = event.date.strftime('%d %B %Y, %H:%M')
@@ -76,9 +96,10 @@ def filter_events(request):
                 'date': date_str,
                 'date_only': date_only_str,
                 'venue': event.venue,
-                'participants': event.participants,
-                'description': event.description,
-                'price': event.price if event.price else 'бесплатно',
+                'participants': event.participants if event.participants else None,
+                'description': event.description[:100] + '...' if len(event.description) > 100 else event.description,
+                'price': event.get_price_display(),
+                'price_value': event.price,
                 'image': event.image.url if event.image else '',
             })
         
