@@ -3,18 +3,21 @@ const dateButtons = document.querySelectorAll('.filter-btn[data-date]');
 const searchInput = document.querySelector('.main-search');
 const resetButton = document.getElementById('reset-filters');
 const eventsGrid = document.getElementById('events-grid');
+const sortSelect = document.getElementById('sort-price');
 
 let currentCategory = 'all';
 let currentDate = 'all';
 let currentSearch = '';
 let customDateStart = '';
 let customDateEnd = '';
+let currentSort = 'default';
 
 function filterEvents() {
     const url = new URL('/filter-events/', window.location.origin);
     url.searchParams.append('category', currentCategory);
     url.searchParams.append('date', currentDate);
     url.searchParams.append('search', currentSearch);
+    url.searchParams.append('sort', currentSort);
     
     if (currentDate === 'custom') {
         url.searchParams.append('date_start', customDateStart);
@@ -24,15 +27,40 @@ function filterEvents() {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            const eventIds = data.events.map(e => e.id);
+            eventsGrid.innerHTML = '';
             
-            document.querySelectorAll('.event-card').forEach(card => {
-                const eventId = parseInt(card.dataset.eventId);
-                if (eventIds.includes(eventId)) {
-                    card.style.display = 'flex';
+            data.events.forEach(event => {
+                const card = document.createElement('article');
+                card.className = 'event-card';
+                card.setAttribute('data-event-id', event.id);
+
+                let imageHtml = '';
+                if (event.image) {
+                    imageHtml = `<img src="${event.image}" alt="${event.title}">`;
                 } else {
-                    card.style.display = 'none';
+                    imageHtml = '<span>Нет изображения</span>';
                 }
+                
+                let participantsHtml = '';
+                if (event.participants) {
+                    participantsHtml = `<p><strong>Участники:</strong> ${event.participants.substring(0, 30)}</p>`;
+                }
+                
+                card.innerHTML = `
+                    <div class="event-image">
+                        ${imageHtml}
+                    </div>
+                    <span class="event-category">${event.category}</span>
+                    <h3>${event.title}</h3>
+                    <p><strong>Дата:</strong> ${event.date}</p>
+                    <p><strong>Место:</strong> ${event.venue}</p>
+                    ${participantsHtml}
+                    <p class="event-description">${event.description}</p>
+                    <p class="event-price">${event.price}</p>
+                    <a href="/event/${event.id}/" class="btn-details">Подробнее</a>
+                `;
+                
+                eventsGrid.appendChild(card);
             });
         })
         .catch(error => {
@@ -71,6 +99,7 @@ resetButton.addEventListener('click', () => {
     currentCategory = 'all';
     currentDate = 'all';
     currentSearch = '';
+    currentSort = 'default';
     customDateStart = '';
     customDateEnd = '';
     
@@ -91,6 +120,7 @@ resetButton.addEventListener('click', () => {
     const dateEnd = document.getElementById('date-end');
     if (dateStart) dateStart.value = '';
     if (dateEnd) dateEnd.value = '';
+    if (sortSelect) sortSelect.value = 'default';
     
     filterEvents();
 });
@@ -120,6 +150,13 @@ document.getElementById('apply-date-range').addEventListener('click', () => {
         alert('Пожалуйста, выберите начальную и конечную дату');
     }
 });
+
+if (sortSelect) {
+    sortSelect.addEventListener('change', () => {
+        currentSort = sortSelect.value;
+        filterEvents();
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('nav a[data-category="all"]').classList.add('active-category');

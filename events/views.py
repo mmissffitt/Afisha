@@ -50,6 +50,7 @@ def filter_events(request):
         search = request.GET.get('search', '')
         date_start = request.GET.get('date_start', '')
         date_end = request.GET.get('date_end', '')
+        sort = request.GET.get('sort', 'default') 
         
         events = Event.objects.all()
 
@@ -102,6 +103,13 @@ def filter_events(request):
                 Q(participants__icontains=search)
             )
         
+        if sort == 'price_asc':
+            events = events.order_by('price')
+        elif sort == 'price_desc':
+            events = events.order_by('-price')
+        else:
+            events = events.order_by('date')
+
         events_data = []
         for event in events:
             category_display = dict(Event.CATEGORY_CHOICES).get(event.category, event.category)

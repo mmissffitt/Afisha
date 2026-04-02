@@ -27,7 +27,14 @@
     <button id="apply-date-range" class="search-btn date-apply-btn">Применить</button>
 </div>
         </div>
-        
+        <div class="sort-container" style="margin-top: 1.25rem;">
+    <label for="sort-price" style="margin-right: 0.625rem; font-weight: 500;">Сортировка по цене:</label>
+    <select id="sort-price" class="filter-btn" style="padding: 0.5rem 1rem;">
+        <option value="default">Без сортировки</option>
+        <option value="price_asc">Сначала дешёвые</option>
+        <option value="price_desc">Сначала дорогие</option>
+    </select>
+</div>
         <div class="reset-container">
     <button id="reset-filters" class="reset-btn">Сбросить все фильтры</button>
 </div>
