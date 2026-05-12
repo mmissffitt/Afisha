@@ -22,47 +22,31 @@
             </div>
             
             <div id="date-range-picker" class="date-picker-hidden">
-    <label>С: <input type="date" id="date-start"></label>
-    <label class="date-label">По: <input type="date" id="date-end"></label>
-    <button id="apply-date-range" class="search-btn date-apply-btn">Применить</button>
-</div>
+                <label>С: <input type="date" id="date-start"></label>
+                <label class="date-label">По: <input type="date" id="date-end"></label>
+                <button id="apply-date-range" class="search-btn date-apply-btn">Применить</button>
+            </div>
         </div>
+        
         <div class="sort-container" style="margin-top: 1.25rem;">
-    <label for="sort-price" style="margin-right: 0.625rem; font-weight: 500;">Сортировка по цене:</label>
-    <select id="sort-price" class="filter-btn" style="padding: 0.5rem 1rem;">
-        <option value="default">Без сортировки</option>
-        <option value="price_asc">Сначала дешёвые</option>
-        <option value="price_desc">Сначала дорогие</option>
-    </select>
-</div>
+            <label for="sort-price" style="margin-right: 0.6rem; font-weight: 500;">Сортировка по цене:</label>
+            <select id="sort-price" class="filter-btn" style="padding: 0.5rem 1rem;">
+                <option value="default">Без сортировки</option>
+                <option value="price_asc">Сначала дешёвые</option>
+                <option value="price_desc">Сначала дорогие</option>
+            </select>
+        </div>
+        
         <div class="reset-container">
-    <button id="reset-filters" class="reset-btn">Сбросить все фильтры</button>
-</div>
+            <button id="reset-filters" class="reset-btn">Сбросить все фильтры</button>
+        </div>
     </section>
 
     <section id="events">
         <h2>Афиша событий</h2>
         <div class="events-grid" id="events-grid">
             {% for event in events %}
-            <article class="event-card" data-event-id="{{ event.id }}">
-                <div class="event-image">
-                    {% if event.image %}
-                        <img src="{{ event.image.url }}" alt="{{ event.title }}">
-                    {% else %}
-                        <span>Нет изображения</span>
-                    {% endif %}
-                </div>
-                <span class="event-category">{{ event.get_category_display }}</span>
-                <h3>{{ event.title }}</h3>
-                <p><strong>Дата:</strong> {{ event.get_date_display }}</p>
-                <p><strong>Место:</strong> {{ event.venue }}</p>
-                {% if event.participants %}
-                <p><strong>Участники:</strong> {{ event.participants|truncatechars:30 }}</p>
-                {% endif %}
-                <p class="event-description">{{ event.description|truncatechars:80 }}</p>
-                <p class="event-price">{{ event.get_price_display }}</p>
-                <a href="{% url 'event_detail' event.id %}" class="btn-details">Подробнее</a>
-            </article>
+                {% include 'events/includes/event_card.html' with event=event %}
             {% endfor %}
         </div>
     </section>
@@ -71,24 +55,9 @@
         <h2>Популярные события</h2>
         <div class="events-grid">
             {% for event in popular_events %}
-            <article class="event-card" data-event-id="{{ event.id }}">
-                <div class="event-image">
-                    {% if event.image %}
-                        <img src="{{ event.image.url }}" alt="{{ event.title }}">
-                    {% else %}
-                        <span>Нет изображения</span>
-                    {% endif %}
-                </div>
-                <span class="event-category">{{ event.get_category_display }}</span>
-                <h3>{{ event.title }}</h3>
-                <p><strong>Дата:</strong> {{ event.get_date_display }}</p>
-                <p><strong>Место:</strong> {{ event.venue }}</p>
-                <p class="event-description">{{ event.description|truncatechars:80 }}</p>
-                <p class="event-price">{{ event.get_price_display }}</p>
-                <a href="{% url 'event_detail' event.id %}" class="btn-details">Подробнее</a>
-            </article>
+                {% include 'events/includes/event_card.html' with event=event %}
             {% empty %}
-            <p>Популярных событий пока нет</p>
+                <p>Популярных событий пока нет</p>
             {% endfor %}
         </div>
     </section>

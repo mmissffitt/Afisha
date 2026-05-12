@@ -12,7 +12,6 @@
                     <img src="{{ event.image.url }}" alt="{{ event.title }}">
                 {% else %}
                     <div class="no-image-placeholder">Нет изображения</div>
-
                 {% endif %}
             </div>
             
@@ -21,16 +20,7 @@
                 <h1>{{ event.title }}</h1>
                 
                 <div class="event-detail-meta">
-                   <p><strong>Дата:</strong> 
-    {% if event.date_end %}
-        {{ event.date|date:"d.m.Y" }} - {{ event.date_end|date:"d.m.Y" }}
-        {% if event.date|date:"H:i" == event.date_end|date:"H:i" %}
-            {{ event.date|date:"H:i" }}
-        {% endif %}
-    {% else %}
-        {{ event.get_date_display }}
-    {% endif %}
-</p>
+                    <p><strong>Дата:</strong> {{ event.get_date_display }}</p>
                     <p><strong>Место:</strong> {{ event.venue }}</p>
                     <p><strong>Адрес:</strong> {{ event.address }}</p>
                     {% if event.participants %}
@@ -51,11 +41,13 @@
             <p>{{ event.description|linebreaks }}</p>
         </div>
         
-       <div class="how-to-get">
-    <h3>Как добраться</h3>
-    <p><strong>Адрес:</strong> {{ event.address }}</p>
-    <p><strong>Как проехать:</strong> Остановка «Драмтеатр» (автобусы 1, 5, 15, 45).</p>
-</div>
+        {% if event.how_to_get %}
+        <div class="how-to-get">
+            <h3>Как добраться</h3>
+            <p><strong>Адрес:</strong> {{ event.address }}</p>
+            <p>{{ event.how_to_get|linebreaks }}</p>
+        </div>
+        {% endif %}
     </section>
 </main>
 {% endblock %}

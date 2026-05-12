@@ -16,22 +16,18 @@
         <p>Каталог событий города Сургута</p>
     </header>
 
-   <nav>
-    <div class="nav-container">
-        <ul>
-            <li><a href="{% url 'index' %}" {% if request.path == '/' %}data-category="all"{% endif %}>Все</a></li>
-            {% if request.path == '/' %}
+    <nav>
+        <div class="nav-container">
+            <ul>
+                <li><a href="{% url 'index' %}" data-category="all">Все</a></li>
                 <li><a href="#" data-category="music">Музыка</a></li>
                 <li><a href="#" data-category="theatre">Театр</a></li>
                 <li><a href="#" data-category="art">Искусство</a></li>
                 <li><a href="#" data-category="sport">Спорт</a></li>
                 <li><a href="#" data-category="exhibitions">Выставки</a></li>
-            {% else %}
-                <li><a href="{% url 'index' %}">На главную</a></li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
+            </ul>
+        </div>
+    </nav>
 
     {% block content %}{% endblock %}
 

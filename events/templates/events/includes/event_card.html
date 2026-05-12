@@ -1,0 +1,19 @@
+<article class="event-card" data-event-id="{{ event.id }}">
+    <div class="event-image">
+        {% if event.image %}
+            <img src="{{ event.image.url }}" alt="{{ event.title }}">
+        {% else %}
+            <span>Нет изображения</span>
+        {% endif %}
+    </div>
+    <span class="event-category">{{ event.get_category_display }}</span>
+    <h3>{{ event.title }}</h3>
+    <p><strong>Дата:</strong> {{ event.get_date_display }}</p>
+    <p><strong>Место:</strong> {{ event.venue }}</p>
+    {% if event.participants %}
+    <p><strong>Участники:</strong> {{ event.participants|truncatechars:30 }}</p>
+    {% endif %}
+    <p class="event-description">{{ event.description|truncatechars:80 }}</p>
+    <p class="event-price">{{ event.get_price_display }}</p>
+    <a href="{% url 'event_detail' event.id %}" class="btn-details">Подробнее</a>
+</article>

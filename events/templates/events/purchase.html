@@ -15,32 +15,27 @@
             <p><strong>Цена:</strong> {{ event.get_price_display }}</p>
         </div>
         
-        <form method="post">
+        <form method="post" novalidate>
             {% csrf_token %}
             
+            {% for field in form %}
             <div class="form-group">
-                <label for="name">Ваше имя</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="error-message" style="color: var(--milk-chocolate); font-size: 0.85rem; margin-top: 0.3rem;">
+                    {% for error in field.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="phone">Телефон</label>
-                <input type="tel" class="form-control" id="phone" name="phone" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="quantity">Количество билетов</label>
-                <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="10" value="1">
-            </div>
+            {% endfor %}
             
             <button type="submit" class="btn-buy btn-submit">
-    Оплатить
-</button>
+                Оплатить {{ event.get_price_display }} 
+                <span id="total-price" style="display: none;">за <span id="ticket-count">1</span> билет(а): <span id="total-amount">{{ event.price }}</span> ₽</span>
+            </button>
         </form>
     </div>
 </main>
